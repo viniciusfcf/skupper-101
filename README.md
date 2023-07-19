@@ -22,8 +22,10 @@ VANs provide multiple routing patterns, so communications can be distributed in 
 ### OpenShift to bare metal
 - skupper init --enable-console --enable-flow-collector --console-auth unsecured
 - skupper gateway init --type docker
+  - skupper gateway init --config simple_docker.yaml --type docker
 - skupper expose service <NAME> --address <...> --port <...>
   - Essa configuração cria o service no OpenShift
+  - skupper expose service database --address database --port 5432 --protocol tcp
 - skupper gateway bind <address> <host> <port>
   - No MacOS esse bind ainda não está funcionando, as portas para isso não foram expostas corretamente, workaround: Iniciar o gateway com a configuração do bind, ex:
     - skupper gateway init --config [simple_docker.yaml](https://raw.githubusercontent.com/viniciusfcf/service-interconnect-sandbox-demo/main/simple_docker.yaml) --type docker
