@@ -1,0 +1,1 @@
+oc delete pods -l deployment=patient-portal-frontend
