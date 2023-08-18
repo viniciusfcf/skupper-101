@@ -6,6 +6,8 @@
 - Estar logado em um OpenShift
 - CLI do skupper
 - As apps estarem rodando 
+  - front no OpenShift
+  - payment no sandbox com skupper já inicializado
 
 ## Detalhes importantes
 - Para conectar 2 clusters, link
@@ -20,6 +22,16 @@
 VANs provide multiple routing patterns, so communications can be distributed in anycast (balanced or closest) or multicast patterns.
 
 ### OpenShift to bare metal
+
+ TL;DR:
+- skupper init --enable-console --enable-flow-collector --console-auth unsecured
+- skupper gateway init --config simple_docker.yaml --type docker
+- skupper expose service database --address database --port 5432 --protocol tcp
+- skupper gateway bind database localhost 5432
+
+
+COMPLETO:
+
 - skupper init --enable-console --enable-flow-collector --console-auth unsecured
 - skupper gateway init --type docker
   - skupper gateway init --config simple_docker.yaml --type docker
@@ -28,13 +40,18 @@ VANs provide multiple routing patterns, so communications can be distributed in 
   - skupper expose service database --address database --port 5432 --protocol tcp
 - skupper gateway bind <address> <host> <port>
   - skupper gateway bind database host.docker.internal 5432
+  - skupper gateway bind database localhost 5432
   - No MacOS esse bind ainda não está funcionando, as portas para isso não foram expostas corretamente, workaround: Iniciar o gateway com a configuração do bind, ex:
     - skupper gateway init --config [simple_docker.yaml](https://raw.githubusercontent.com/viniciusfcf/service-interconnect-sandbox-demo/main/simple_docker.yaml) --type docker
 
 ### OpenShift to OpenShift
 
-## OpenShift to localhost (MacOS)
-- https://github.com/viniciusfcf/service-interconnect-sandbox-demo
+Conf no Front
+- skupper token create front.json
+
+Conf no Sandbox
+- skupper init --enable-console --enable-flow-collector --console-auth unsecured
+- skupper link create front.json
 
 
 ## OpenShift to localhost (Linux)
